@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="pt" datatype="plaintext" original="ng2.template">
+    <body>
+      <!-- Header e Títulos -->
+      <trans-unit id="app.title" datatype="html">
+        <source>Cadastro de Empreendimentos</source>
+        <target>Cadastro de Empreendimentos</target>
+      </trans-unit>
+
+      <trans-unit id="page.list.title" datatype="html">
+        <source>Lista de Empreendimentos</source>
+        <target>Lista de Empreendimentos</target>
+      </trans-unit>
+
+      <trans-unit id="page.form.title.create" datatype="html">
+        <source>Novo Empreendimento</source>
+        <target>Novo Empreendimento</target>
+      </trans-unit>
+
+      <trans-unit id="page.form.title.edit" datatype="html">
+        <source>Editar Empreendimento</source>
+        <target>Editar Empreendimento</target>
+      </trans-unit>
+
+      <!-- Labels de Formulário -->
+      <trans-unit id="form.label.name" datatype="html">
+        <source>Nome</source>
+        <target>Nome</target>
+      </trans-unit>
+
+      <trans-unit id="form.label.description" datatype="html">
+        <source>Segmento</source>
+        <target>Segment</target>
+      </trans-unit>
+
+      <trans-unit id="form.label.location" datatype="html">
+        <source>Município</source>
+        <target>City</target>
+      </trans-unit>
+
+      <trans-unit id="form.label.status" datatype="html">
+        <source>Status</source>
+        <target>Status</target>
+      </trans-unit>
+
+
+      <!-- Botões -->
+      <trans-unit id="button.create" datatype="html">
+        <source>Criar</source>
+        <target>Criar</target>
+      </trans-unit>
+
+      <trans-unit id="button.edit" datatype="html">
+        <source>Editar</source>
+        <target>Editar</target>
+      </trans-unit>
+
+      <trans-unit id="button.delete" datatype="html">
+        <source>Deletar</source>
+        <target>Deletar</target>
+      </trans-unit>
+
+      <trans-unit id="button.save" datatype="html">
+        <source>Salvar</source>
+        <target>Salvar</target>
+      </trans-unit>
+
+      <trans-unit id="button.cancel" datatype="html">
+        <source>Cancelar</source>
+        <target>Cancelar</target>
+      </trans-unit>
+
+      <trans-unit id="button.back" datatype="html">
+        <source>Voltar</source>
+        <target>Voltar</target>
+      </trans-unit>
+
+      <!-- Mensagens de Aviso -->
+      <trans-unit id="message.success" datatype="html">
+        <source>Operação realizada com sucesso!</source>
+        <target>Operação realizada com sucesso!</target>
+      </trans-unit>
+
+      <trans-unit id="message.error" datatype="html">
+        <source>Erro ao processar a operação</source>
+        <target>Erro ao processar a operação</target>
+      </trans-unit>
+
+      <trans-unit id="message.confirm.delete" datatype="html">
+        <source>Tem certeza que deseja deletar este empreendimento?</source>
+        <target>Tem certeza que deseja deletar este empreendimento?</target>
+      </trans-unit>
+
+      <!-- Colunas da Tabela -->
+      <trans-unit id="table.column.id" datatype="html">
+        <source>ID</source>
+        <target>ID</target>
+      </trans-unit>
+
+      <trans-unit id="table.column.name" datatype="html">
+        <source>Nome</source>
+        <target>Nome</target>
+      </trans-unit>
+
+      <trans-unit id="table.column.location" datatype="html">
+        <source>Município</source>
+        <target>City</target>
+      </trans-unit>
+
+      <trans-unit id="table.column.status" datatype="html">
+        <source>Status</source>
+        <target>Status</target>
+      </trans-unit>
+
+      <trans-unit id="table.column.actions" datatype="html">
+        <source>Ações</source>
+        <target>Ações</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
