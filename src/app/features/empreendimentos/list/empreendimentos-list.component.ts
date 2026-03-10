@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { Empreendimento } from '@app/core/models';
 import { LoadingComponent } from '@app/shared/components';
+import { StatusLabelPipe } from '@app/shared/pipes';
 import { EmpreendimentoService } from '@app/core/services';
 
 @Component({
@@ -25,35 +24,36 @@ import { EmpreendimentoService } from '@app/core/services';
     MatCardModule,
     MatTooltipModule,
     LoadingComponent,
+    StatusLabelPipe,
   ],
   templateUrl: './empreendimentos-list.component.html',
   styleUrl: './empreendimentos-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmpreendimentosListComponent implements OnInit, OnDestroy {
+export class EmpreendimentosListComponent implements OnInit {
   empreendimentos: Empreendimento[] = [];
   displayedColumns: string[] = ['id', 'nomeEmpreendimento', 'nomeEmpreendedor', 'municipio', 'segmento', 'status', 'acoes'];
   isLoading = false;
 
-  private destroy$ = new Subject<void>();
-
-  constructor(
-    private empreendimentoService: EmpreendimentoService,
-    private router: Router
-  ) {}
+  private empreendimentoService = inject(EmpreendimentoService);
+  private router = inject(Router);
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.carregarEmpreendimentos();
+    this.carregarEmpreendimentos(); 
   }
 
   private carregarEmpreendimentos(): void {
     this.isLoading = true;
+    console.log('Carregando empreendimentos...');
     this.empreendimentoService
       .listar()
-      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (dados) => {
+          console.log('Empreendimentos carregados:', dados);
           this.empreendimentos = dados;
           this.isLoading = false;
+          this.changeDetectorRef.markForCheck();
         },
         error: (error) => {
           console.error('Erro ao carregar empreendimentos:', error);
@@ -75,7 +75,6 @@ export class EmpreendimentosListComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.empreendimentoService
         .deletar(id)
-        .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
             this.carregarEmpreendimentos();
@@ -86,18 +85,5 @@ export class EmpreendimentosListComponent implements OnInit, OnDestroy {
           },
         });
     }
-  }
-
-  getStatusLabel(status: boolean): string {
-    return status ? 'Ativo' : 'Inativo';
-  }
-
-  getStatusColor(status: boolean): string {
-    return status ? 'primary' : 'warn';
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

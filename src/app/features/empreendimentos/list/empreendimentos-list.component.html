@@ -59,7 +59,7 @@
             class="status-badge"
             [ngClass]="element.status ? 'status-ativo' : 'status-inativo'"
           >
-            {{ getStatusLabel(element.status) }}
+            {{ element.status | statusLabel }}
           </span>
         </td>
       </ng-container>

@@ -68,7 +68,6 @@
             [matAutocomplete]="autoMunicipio"
             formControlName="municipio"
             placeholder="Procure um município (3+ letras)"
-            [disabled]="isSearchingMunicipio"
           />
           <mat-icon *ngIf="isSearchingMunicipio" matSuffix>hourglass_top</mat-icon>
           <mat-autocomplete #autoMunicipio="matAutocomplete">
@@ -128,7 +127,7 @@
       <button
         mat-button
         color="primary"
-        (click)="voltar()"
+        (click)="voltarComReload()"
         [disabled]="isSaving"
       >
         Cancelar

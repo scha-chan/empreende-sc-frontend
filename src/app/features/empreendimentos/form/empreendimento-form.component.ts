@@ -160,7 +160,7 @@ export class EmpreendimentoFormComponent implements OnInit {
           console.error('Erro ao carregar empreendimento:', error);
           this.isLoading = false;
           this.changeDetectorRef.markForCheck();
-          this.voltar();
+          this.voltarComReload();
         },
       });
   }
@@ -189,6 +189,7 @@ export class EmpreendimentoFormComponent implements OnInit {
       console.log('Termo vazio, resetando filtro');
       this.filteredMunicipios = [];
       this.isSearchingMunicipio = false;
+      this.form.get('municipio')?.enable();
       this.changeDetectorRef.markForCheck();
       return;
     }
@@ -198,6 +199,7 @@ export class EmpreendimentoFormComponent implements OnInit {
       console.log('Termo com menos de 3 letras, aguardando');
       this.filteredMunicipios = [];
       this.isSearchingMunicipio = false;
+      this.form.get('municipio')?.enable();
       this.changeDetectorRef.markForCheck();
       return;
     }
@@ -205,6 +207,7 @@ export class EmpreendimentoFormComponent implements OnInit {
     // Buscar no backend
     console.log('Buscando no backend com termo:', termo);
     this.isSearchingMunicipio = true;
+    this.form.get('municipio')?.disable();
     this.changeDetectorRef.markForCheck();
     
     this.municipioService
@@ -214,6 +217,7 @@ export class EmpreendimentoFormComponent implements OnInit {
           console.log('Resultado da busca:', municipios);
           this.filteredMunicipios = municipios as Municipio[];
           this.isSearchingMunicipio = false;
+          this.form.get('municipio')?.enable();
           this.changeDetectorRef.markForCheck();
           
           // Abrir o painel do autocomplete com os resultados
@@ -225,6 +229,7 @@ export class EmpreendimentoFormComponent implements OnInit {
           console.error('Erro ao buscar municipios:', error);
           this.filteredMunicipios = [];
           this.isSearchingMunicipio = false;
+          this.form.get('municipio')?.enable();
           this.changeDetectorRef.markForCheck();
         },
       });
@@ -309,13 +314,12 @@ export class EmpreendimentoFormComponent implements OnInit {
     });
   }
 
-  private voltarComReload(): void {
-    this.router.navigate(['/empreendimentos']).then(() => {
-      window.location.reload();
-    });
+  public voltarComReload(): void {
+    this.router.navigate(['/empreendimentos']);
   }
 
   voltar(): void {
+    this.isLoading = false;
     this.router.navigate(['/empreendimentos']);
   }
 }
