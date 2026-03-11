@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --watch=false",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "serve:ssr:empreende-sc": "node dist/empreende-sc/server/server.mjs"
@@ -14,6 +14,7 @@
   "private": true,
   "packageManager": "npm@11.6.2",
   "dependencies": {
+    "@angular/animations": "^21.2.3",
     "@angular/cdk": "^21.2.1",
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
