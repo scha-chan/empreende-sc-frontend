@@ -45,13 +45,11 @@ Base de dados de municípios de Santa Catarina:
 
 Este projeto é uma aplicação frontend que funciona em conjunto com uma API backend. O repositório do backend pode ser encontrado em:
 
-📍 **Repositório**: `empreende-sc-backend`
+📍 **Repositório**: `https://github.com/scha-chan/empreende-sc-backend`.
 
 ### Configuração do Backend
 
 Para que a aplicação funcione corretamente, você precisa ter o backend rodando localmente. Consulte o repositório do backend para instruções de instalação e configuração.
-
-Repositório no Github: `https://github.com/scha-chan/empreende-sc-backend`.
 
 A aplicação frontend faz requisições HTTP para o backend, incluindo:
 - Listagem, criação, atualização e exclusão de empreendimentos
