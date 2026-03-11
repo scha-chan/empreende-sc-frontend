@@ -1,59 +1,157 @@
 # EmpreendeSC
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.1.
+Plataforma de gestão de empreendimentos do estado de Santa Catarina. Este projeto foi gerado utilizando [Angular CLI](https://github.com/angular/angular-cli) versão 21.2.1.
 
-## Development server
+## 📋 Sobre o Projeto
 
-To start a local development server, run:
+EmpreendeSC é uma aplicação web desenvolvida em Angular que permite o cadastro e gerenciamento de empreendimentos, empreendedores e informações relacionadas. A plataforma oferece uma interface intuitiva com validação de dados, notificações em tempo real e tratamento robusto de erros.
+
+### Funcionalidades Principais
+
+#### **Empreendimentos**
+Cadastro completo de empreendimentos com informações detalhadas:
+- **Nome do Empreendimento**: Identificação única do negócio
+- **Empreendedor**: Associação com um empreendedor cadastrado (é possível adicionar novo durante o cadastro)
+- **Município**: Localização geográfica do empreendimento (com busca dinâmica por 3+ letras)
+- **Segmento**: Classificação do segmento de atuação do negócio
+- **Contato**: Email (opcional) e/ou Telefone (opcional) - é obrigatório ter pelo menos um dos dois
+- **Status**: Ativo ou Inativo
+
+**Validações**:
+- Email opcional mas deve ser válido (se preenchido)
+- Telefone opcional mas deve estar no formato (XX) 9XXXX-XXXX ou (XX) XXXX-XXXX (se preenchido)
+- Pelo menos um contato (email ou telefone) deve estar preenchido ao salvar
+- Validação em tempo real com mensagens de erro claras
+
+#### **Empreendedores**
+Gerenciamento de perfis de empreendedores:
+- **Nome**: Identificação do empreendedor
+- Possibilidade de criar novo empreendedor durante o cadastro de empreendimento
+- Autocomplete com busca instant para seleção rápida
+- Validação de campos obrigatórios
+
+#### **Municípios**
+Base de dados de municípios de Santa Catarina:
+- **Busca dinâmica**: Digite 3 ou mais letras para buscar
+- **Autocomplete**: Resultados aparecem conforme você digita
+- **Informações**: Nome e estado do município
+- Integração com API backend para dados sempre atualizados
+
+## � Backend
+
+Este projeto é uma aplicação frontend que funciona em conjunto com uma API backend. O repositório do backend pode ser encontrado em:
+
+📍 **Repositório**: `empreende-sc-backend`
+
+### Configuração do Backend
+
+Para que a aplicação funcione corretamente, você precisa ter o backend rodando localmente. Consulte o repositório do backend para instruções de instalação e configuração.
+
+Repositório no Github: `https://github.com/scha-chan/empreende-sc-backend`.
+
+A aplicação frontend faz requisições HTTP para o backend, incluindo:
+- Listagem, criação, atualização e exclusão de empreendimentos
+- Gestão de empreendedores
+- Busca de municípios
+- Autenticação e autorização (se aplicável)
+
+**Importante**: Certifique-se de que o backend está rodando na porta esperada (`http://localhost:3000`) antes de iniciar a aplicação frontend.
+
+## �🚀 Servidor de Desenvolvimento
+
+Para iniciar um servidor local de desenvolvimento, execute:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+ou utilize o npm:
 
 ```bash
-ng generate component component-name
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Depois que o servidor estiver em execução, abra seu navegador e navegue até `http://localhost:4200/`. A aplicação será recarregada automaticamente sempre que você modificar algum arquivo de origem.
+
+## 🏗️ Scaffolding de Código
+
+O Angular CLI inclui ferramentas poderosas de geração de código. Para gerar um novo componente, execute:
+
+```bash
+ng generate component nome-do-componente
+```
+
+Para obter uma lista completa de esquemas disponíveis (como `components`, `directives` ou `pipes`), execute:
 
 ```bash
 ng generate --help
 ```
 
-## Building
+## 🔨 Build
 
-To build the project run:
+Para fazer o build do projeto, execute:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Isso compilará seu projeto e armazenará os artefatos de build no diretório `dist/`. Por padrão, o build de produção otimiza sua aplicação para performance e velocidade.
 
-## Running unit tests
+## ✅ Executar Testes Unitários
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Para executar testes unitários com o executor de testes [Vitest](https://vitest.dev/), use o seguinte comando:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+ou
 
-For end-to-end (e2e) testing, run:
+```bash
+npm test
+```
+
+## 🧪 Testes End-to-End
+
+Para testes end-to-end (e2e), execute:
 
 ```bash
 ng e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+O Angular CLI não vem com um framework de teste end-to-end por padrão. Você pode escolher um que se adeque às suas necessidades.
 
-## Additional Resources
+## 🔔 Sistema de Notificações
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+A aplicação utiliza um serviço centralizado de notificações com três tipos de mensagens:
+
+- **Sucesso** (Verde): Operações realizadas com sucesso
+- **Aviso** (Laranja): Mensagens informativas ou validações
+- **Erro** (Vermelho): Erros na operação ou problemas de conexão
+
+### Tratamento de Erros de Conexão
+
+Quando não for possível conectar ao servidor, a mensagem exibida será:
+> "Falha ao buscar os dados do servidor"
+
+Em vez de mensagens técnicas ou erros genéricos.
+
+## 📚 Recursos Adicionais
+
+Para mais informações sobre como usar o Angular CLI, incluindo referências de comandos detalhadas, visite a página [Visão Geral e Referência de Comandos do Angular CLI](https://angular.dev/tools/cli).
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Angular 21+**: Framework de desenvolvimento
+- **Angular Material**: Componentes de interface
+- **TypeScript**: Linguagem de programação
+- **RxJS**: Programação reativa
+- **Material Design 3**: Sistema de design
+
+## 📦 Dependências Principais
+
+- `@angular/core`: Core do Angular
+- `@angular/material`: Componentes Material Design
+- `@angular/cdk`: Componentes e utilitários
+- `rxjs`: Biblioteca reativa
+- `sass`: Pré-processador CSS
