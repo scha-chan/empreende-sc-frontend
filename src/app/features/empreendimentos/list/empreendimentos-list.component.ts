@@ -49,18 +49,15 @@ export class EmpreendimentosListComponent implements OnInit {
 
   private carregarEmpreendimentos(): void {
     this.isLoading = true;
-    console.log('Carregando empreendimentos...');
     this.empreendimentoService
       .listar()
       .subscribe({
         next: (dados) => {
-          console.log('Empreendimentos carregados:', dados);
           this.empreendimentos = dados;
           this.isLoading = false;
           this.changeDetectorRef.markForCheck();
         },
         error: (error) => {
-          console.error('Erro ao carregar empreendimentos:', error);
           this.isLoading = false;
           this.changeDetectorRef.markForCheck();
           this.notificationService.exibirErro('Erro ao carregar empreendimentos', error);
@@ -86,7 +83,6 @@ export class EmpreendimentosListComponent implements OnInit {
             this.carregarEmpreendimentos();
           },
           error: (error) => {
-            console.error('Erro ao deletar:', error);
             this.isLoading = false;
             this.changeDetectorRef.markForCheck();
             this.notificationService.exibirErro('Erro ao deletar empreendimento', error);

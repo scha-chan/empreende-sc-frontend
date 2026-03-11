@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, tap, exhaustMap, filter } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
@@ -17,7 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 
-import { Empreendimento, Empreendedor, Municipio, EmpreendimentoCreate, EmpreendimentoUpdate } from '@app/core/models';
+import { Empreendedor, Municipio, EmpreendimentoCreate, EmpreendimentoUpdate } from '@app/core/models';
 import { SEGMENTO_ATUACAO_OPTIONS } from '@app/core/enums';
 import { HeaderComponent, LoadingComponent } from '@app/shared/components';
 import { EmpreendimentoService, EmpreendedorService, MunicipioService, NotificationService } from '@app/core/services';
@@ -120,7 +119,6 @@ export class EmpreendimentoFormComponent implements OnInit {
         debounceTime(300),
         distinctUntilChanged(),
         tap((value) => {
-          console.log('Mudança no campo municipio:', value);
           // Resetar se estiver vazio ou menos de 3 caracteres
           if (!value || value.length < 3) {
             this.filteredMunicipios = [];
@@ -136,14 +134,12 @@ export class EmpreendimentoFormComponent implements OnInit {
           this.changeDetectorRef.markForCheck();
         }),
         exhaustMap((termo) => {
-          console.log('Buscando municipios com termo:', termo);
           return this.municipioService.buscar(termo);
         }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: (municipios) => {
-          console.log('Resultado da busca:', municipios);
           this.filteredMunicipios = municipios as Municipio[];
           this.isSearchingMunicipio = false;
           this.form.get('municipio')?.enable();
@@ -154,7 +150,6 @@ export class EmpreendimentoFormComponent implements OnInit {
           }, 100);
         },
         error: (error) => {
-          console.error('Erro ao buscar municipios:', error);
           this.filteredMunicipios = [];
           this.isSearchingMunicipio = false;
           this.form.get('municipio')?.enable();
@@ -173,7 +168,6 @@ export class EmpreendimentoFormComponent implements OnInit {
         this.changeDetectorRef.markForCheck();
       },
       error: (error) => {
-        console.error('Erro ao carregar empreendedores:', error);
         this.isLoading = false;
         this.changeDetectorRef.markForCheck();
       },
@@ -216,7 +210,6 @@ export class EmpreendimentoFormComponent implements OnInit {
           this.changeDetectorRef.markForCheck();
         },
         error: (error) => {
-          console.error('Erro ao carregar empreendimento:', error);
           this.isLoading = false;
           this.notificationService.exibirErro('Erro ao carregar empreendimento', error);
           this.changeDetectorRef.markForCheck();
@@ -259,14 +252,12 @@ export class EmpreendimentoFormComponent implements OnInit {
         },
         error: (error) => {
           this.notificationService.exibirErro('Erro ao adicionar empreendedor', error);
-          console.error('Erro ao adicionar empreendedor:', error);
           this.changeDetectorRef.markForCheck();
         },
       });
   }
 
   public selecionarEmpreendedor(empreendedor: Empreendedor): void {
-    console.log('selecionarEmpreendedor chamado com:', empreendedor);
     this.selectedEmpreendedor = empreendedor;
     this.form.get('nomeEmpreendedor')?.setValue(empreendedor.nome, { emitEvent: false });
     this.filteredEmpreendedores = [];
@@ -275,7 +266,6 @@ export class EmpreendimentoFormComponent implements OnInit {
   }
 
   public selecionarMunicipio(municipio: Municipio): void {
-    console.log('selecionarMunicipio chamado com:', municipio);
     this.selectedMunicipio = municipio;
     this.form.get('municipio')?.setValue(municipio.nome);
     this.filteredMunicipios = [];
@@ -305,8 +295,6 @@ export class EmpreendimentoFormComponent implements OnInit {
       status: this.form.get('status')?.value,
     };
 
-    console.log('Dados a enviar:', dados);
-
     const operacao = this.isEditMode
       ? this.empreendimentoService.atualizar(this.empreendimentoId!, dados as EmpreendimentoUpdate)
       : this.empreendimentoService.criar(dados as EmpreendimentoCreate);
@@ -320,7 +308,6 @@ export class EmpreendimentoFormComponent implements OnInit {
         this.isSaving = false;
         this.changeDetectorRef.markForCheck();
         this.notificationService.exibirErro('Erro ao salvar empreendimento', error);
-        console.error('Erro ao salvar:', error);
       },
     });
   }

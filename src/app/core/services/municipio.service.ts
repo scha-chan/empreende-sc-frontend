@@ -15,10 +15,8 @@ export class MunicipioService extends BaseHttpService<Municipio> {
   }
 
   buscar(termo: string): Observable<Municipio[]> {
-    console.log('buscar() chamado com termo:', termo);
     return this.http.get<any>(`${this.apiUrl}?nome=${termo}`).pipe(
       map((response) => {
-        console.log('buscar() - Response da API:', response);
         return this.extractData(response);
       })
     );
