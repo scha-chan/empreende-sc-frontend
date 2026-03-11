@@ -12,7 +12,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { Empreendimento } from '@app/core/models';
 import { LoadingComponent, HeaderComponent } from '@app/shared/components';
 import { StatusLabelPipe } from '@app/shared/pipes';
-import { EmpreendimentoService } from '@app/core/services';
+import { EmpreendimentoService, NotificationService } from '@app/core/services';
 
 @Component({
   selector: 'app-empreendimentos-list',
@@ -41,6 +41,7 @@ export class EmpreendimentosListComponent implements OnInit {
   private empreendimentoService = inject(EmpreendimentoService);
   private router = inject(Router);
   private changeDetectorRef = inject(ChangeDetectorRef);
+  private notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.carregarEmpreendimentos(); 
@@ -61,6 +62,8 @@ export class EmpreendimentosListComponent implements OnInit {
         error: (error) => {
           console.error('Erro ao carregar empreendimentos:', error);
           this.isLoading = false;
+          this.changeDetectorRef.markForCheck();
+          this.notificationService.exibirErro('Erro ao carregar empreendimentos', error);
         },
       });
   }
@@ -85,6 +88,8 @@ export class EmpreendimentosListComponent implements OnInit {
           error: (error) => {
             console.error('Erro ao deletar:', error);
             this.isLoading = false;
+            this.changeDetectorRef.markForCheck();
+            this.notificationService.exibirErro('Erro ao deletar empreendimento', error);
           },
         });
     }

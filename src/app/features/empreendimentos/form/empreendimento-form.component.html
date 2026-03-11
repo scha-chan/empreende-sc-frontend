@@ -2,142 +2,169 @@
   <app-loading [isLoading]="isLoading"></app-loading>
 
   <app-header
-    [title]="'Empreendimentos'"
+    [title]="isEditMode ? 'Editar Empreendimento' : 'Novo Empreendimento'"
     [description]="'Gerenciar cadastro de empreendimentos'"
     [isLoading]="isLoading"
     [showAdd]="false"
   ></app-header>
 
-
   @if (!isLoading) {
     <mat-card class="form-card">
-      <mat-card-header>
-        <mat-card-title>
-          {{ isEditMode ? 'Editar Empreendimento' : 'Novo Empreendimento' }}
-        </mat-card-title>
-      </mat-card-header>
-
       <mat-card-content>
-        <form [formGroup]="form" class="form-content">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nome do Empreendimento</mat-label>
-            <input
-              matInput
-              formControlName="nomeEmpreendimento"
-              placeholder="Ex: Empresa XYZ Ltda"
-            />
-            @if (form.get('nomeEmpreendimento')?.hasError('required')) {
-              <mat-error>
-                Nome do empreendimento é obrigatório
-              </mat-error>
-            }
-            @if (form.get('nomeEmpreendimento')?.hasError('minlength')) {
-              <mat-error>
-                Mínimo de 3 caracteres
-              </mat-error>
-            }
-          </mat-form-field>
+        <form [formGroup]="form">
+          <mat-grid-list [cols]="gridCols" rowHeight="90px" gutterSize="12px">
+            <!-- Nome do Empreendimento - Full Width -->
+            <mat-grid-tile [colspan]="2">
+              <mat-form-field appearance="outline" class="full-width-field">
+                <mat-label>Nome do Empreendimento</mat-label>
+                <input
+                  matInput
+                  formControlName="nomeEmpreendimento"
+                  placeholder="Ex: Empresa XYZ Ltda"
+                />
+                @if (form.get('nomeEmpreendimento')?.hasError('required')) {
+                  <mat-error>
+                    Nome do empreendimento é obrigatório
+                  </mat-error>
+                }
+                @if (form.get('nomeEmpreendimento')?.hasError('minlength')) {
+                  <mat-error>
+                    Mínimo de 3 caracteres
+                  </mat-error>
+                }
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nome do Empreendedor(a)</mat-label>
-            <input
-              matInput
-              [matAutocomplete]="autoEmpreendedor"
-              formControlName="nomeEmpreendedor"
-              placeholder="Procure ou adicione um novo"
-            />
-            <mat-autocomplete #autoEmpreendedor="matAutocomplete">
-              <mat-optgroup label="Empreendedores">
-                <mat-option
-                  *ngFor="let emp of filteredEmpreendedores"
-                  [value]="emp.nome"
-                  (click)="selecionarEmpreendedor(emp)"
-                >
-                  {{ emp.nome }}
-                </mat-option>
-              </mat-optgroup>
-              @if (showAddEmpreendedor) {
-                <mat-optgroup label="Ações">
-                  <mat-option (click)="adicionarNovoEmpreendedor()">
-                    <mat-icon>add</mat-icon>
-                    Adicionar: {{ novoEmpreendedor }}
+            <!-- Nome do Empreendedor -->
+            <mat-grid-tile [colspan]="2">
+              <mat-form-field appearance="outline" class="full-width-field">
+                <mat-label>Nome do Empreendedor(a)</mat-label>
+                <input
+                  matInput
+                  [matAutocomplete]="autoEmpreendedor"
+                  formControlName="nomeEmpreendedor"
+                  placeholder="Procure ou adicione um novo"
+                />
+                <mat-autocomplete #autoEmpreendedor="matAutocomplete">
+                  <mat-optgroup label="Empreendedores">
+                    <mat-option
+                      *ngFor="let emp of filteredEmpreendedores"
+                      [value]="emp.nome"
+                      (click)="selecionarEmpreendedor(emp)"
+                    >
+                      {{ emp.nome }}
+                    </mat-option>
+                  </mat-optgroup>
+                  @if (showAddEmpreendedor) {
+                    <mat-optgroup label="Ações">
+                      <mat-option (click)="adicionarNovoEmpreendedor()">
+                        <mat-icon>add</mat-icon>
+                        Adicionar: {{ novoEmpreendedor }}
+                      </mat-option>
+                    </mat-optgroup>
+                  }
+                </mat-autocomplete>
+                @if (form.get('nomeEmpreendedor')?.hasError('required')) {
+                  <mat-error>
+                    Empreendedor é obrigatório
+                  </mat-error>
+                }
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Município -->
+            <mat-grid-tile [colspan]="2">
+              <mat-form-field appearance="outline" class="full-width-field">
+                <mat-label>Município</mat-label>
+                <input
+                  #municipioInput
+                  matInput
+                  [matAutocomplete]="autoMunicipio"
+                  formControlName="municipio"
+                  placeholder="Procure um município (3+ letras)"
+                />
+                @if (isSearchingMunicipio) {
+                  <mat-icon matSuffix>hourglass_top</mat-icon>
+                }
+                <mat-autocomplete #autoMunicipio="matAutocomplete">
+                  <mat-option
+                    *ngFor="let mun of filteredMunicipios"
+                    [value]="mun.nome"
+                    (click)="selecionarMunicipio(mun)"
+                  >
+                    {{ mun.nome }} - {{ mun.estado }}
                   </mat-option>
-                </mat-optgroup>
-              }
-            </mat-autocomplete>
-            @if (form.get('nomeEmpreendedor')?.hasError('required')) {
-              <mat-error>
-                Empreendedor é obrigatório
-              </mat-error>
-            }
-          </mat-form-field>
+                </mat-autocomplete>
+                @if (form.get('municipio')?.hasError('required')) {
+                  <mat-error>
+                    Município é obrigatório
+                  </mat-error>
+                }
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Município</mat-label>
-            <input
-              #municipioInput
-              matInput
-              [matAutocomplete]="autoMunicipio"
-              formControlName="municipio"
-              placeholder="Procure um município (3+ letras)"
-            />
-            @if (isSearchingMunicipio) {
-              <mat-icon matSuffix>hourglass_top</mat-icon>
-            }
-            <mat-autocomplete #autoMunicipio="matAutocomplete">
-              <mat-option
-                *ngFor="let mun of filteredMunicipios"
-                [value]="mun.nome"
-                (click)="selecionarMunicipio(mun)"
-              >
-                {{ mun.nome }} - {{ mun.estado }}
-              </mat-option>
-            </mat-autocomplete>
-            @if (form.get('municipio')?.hasError('required')) {
-              <mat-error>
-                Município é obrigatório
-              </mat-error>
-            }
-          </mat-form-field>
+            <!-- Segmento -->
+            <mat-grid-tile [colspan]="2">
+              <mat-form-field appearance="outline" class="full-width-field">
+                <mat-label>Segmento de Atuação</mat-label>
+                <mat-select formControlName="segmento">
+                  <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
+                    {{ seg.label }}
+                  </mat-option>
+                </mat-select>
+                @if (form.get('segmento')?.hasError('required')) {
+                  <mat-error>
+                    Segmento é obrigatório
+                  </mat-error>
+                }
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Segmento de Atuação</mat-label>
-            <mat-select formControlName="segmento">
-              <mat-option *ngFor="let seg of segmentos" [value]="seg.value">
-                {{ seg.label }}
-              </mat-option>
-            </mat-select>
-            @if (form.get('segmento')?.hasError('required')) {
-              <mat-error>
-                Segmento é obrigatório
-              </mat-error>
-            }
-          </mat-form-field>
+            <!-- E-mail -->
+            <mat-grid-tile [colspan]="2">
+              <mat-form-field appearance="outline" class="full-width-field">
+                <mat-label>E-mail</mat-label>
+                <input matInput formControlName="email" placeholder="exemplo@email.com" />
+                <mat-icon matSuffix>email</mat-icon>
+                @if (form.get('email')?.hasError('required')) {
+                  <mat-error>
+                    E-mail é obrigatório
+                  </mat-error>
+                }
+                @if (form.get('email')?.hasError('email')) {
+                  <mat-error>
+                    E-mail inválido
+                  </mat-error>
+                }
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>E-mail</mat-label>
-            <input matInput formControlName="email" placeholder="exemplo@email.com" />
-            <mat-icon matSuffix>email</mat-icon>
-            @if (form.get('email')?.hasError('required')) {
-              <mat-error>
-                E-mail é obrigatório
-              </mat-error>
-            }
-            @if (form.get('email')?.hasError('email')) {
-              <mat-error>
-                E-mail inválido
-              </mat-error>
-            }
-          </mat-form-field>
+            <!-- Telefone -->
+            <mat-grid-tile [colspan]="2">
+              <mat-form-field appearance="outline" class="full-width-field">
+                <mat-label>Telefone</mat-label>
+                <input matInput formControlName="telefone" placeholder="(11) 98765-4321" />
+                <mat-icon matSuffix>phone</mat-icon>
+                @if (form.get('telefone')?.hasError('pattern')) {
+                  <mat-error>
+                    Telefone inválido
+                  </mat-error>
+                }
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <div class="status-field">
-            <label class="status-label">Ativo</label>
-            <mat-slide-toggle 
-              formControlName="status" 
-              color="primary"
-              class="status-toggle">
-            </mat-slide-toggle>
-          </div>
+            <!-- Status -->
+            <mat-grid-tile [colspan]="1">
+              <div class="status-field">
+                <label class="status-label">Ativo</label>
+                <mat-slide-toggle 
+                  formControlName="status" 
+                  color="primary"
+                  class="status-toggle">
+                </mat-slide-toggle>
+              </div>
+            </mat-grid-tile>
+          </mat-grid-list>
         </form>
       </mat-card-content>
 
