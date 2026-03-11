@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { EmpreendimentosListComponent } from './empreendimentos-list.component';
@@ -56,7 +56,7 @@ describe('EmpreendimentosListComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [EmpreendimentosListComponent, BrowserAnimationsModule],
+      imports: [EmpreendimentosListComponent, NoopAnimationsModule],
       providers: [
         { provide: EmpreendimentoService, useValue: empreendimentoService },
         { provide: NotificationService, useValue: notificationService },
