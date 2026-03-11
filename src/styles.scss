@@ -70,4 +70,14 @@ body {
   }
 }
 
+/* ============================================
+   MAT-CARD - ESTILO PADRONIZADO
+   ============================================ */
+mat-card {
+  background-color: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
 /* You can add global styles to this file, and also import other style files */

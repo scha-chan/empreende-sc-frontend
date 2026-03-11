@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { Empreendimento, Empreendedor, Municipio, EmpreendimentoCreate, EmpreendimentoUpdate } from '@app/core/models';
 import { SEGMENTO_ATUACAO_OPTIONS } from '@app/core/enums';
-import { LoadingComponent } from '@app/shared/components';
+import { HeaderComponent, LoadingComponent } from '@app/shared/components';
 import { EmpreendimentoService, EmpreendedorService, MunicipioService } from '@app/core/services';
 
 @Component({
@@ -34,6 +34,7 @@ import { EmpreendimentoService, EmpreendedorService, MunicipioService } from '@a
     MatCardModule,
     MatIconModule,
     LoadingComponent,
+    HeaderComponent
   ],
   templateUrl: './empreendimento-form.component.html',
   styleUrl: './empreendimento-form.component.scss',

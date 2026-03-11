@@ -7,9 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { Empreendimento } from '@app/core/models';
-import { LoadingComponent } from '@app/shared/components';
+import { LoadingComponent, HeaderComponent } from '@app/shared/components';
 import { StatusLabelPipe } from '@app/shared/pipes';
 import { EmpreendimentoService } from '@app/core/services';
 
@@ -23,7 +24,9 @@ import { EmpreendimentoService } from '@app/core/services';
     MatIconModule,
     MatCardModule,
     MatTooltipModule,
+    MatChipsModule,
     LoadingComponent,
+    HeaderComponent,
     StatusLabelPipe,
   ],
   templateUrl: './empreendimentos-list.component.html',

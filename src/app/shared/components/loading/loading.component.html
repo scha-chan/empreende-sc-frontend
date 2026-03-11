@@ -1,7 +1,9 @@
-<div *ngIf="isLoading" class="loading-overlay">
-  <div class="dots-loader">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
+@if (isLoading) {
+  <div class="loading-overlay">
+    <div class="dots-loader">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
   </div>
-</div>
+}
