@@ -1,0 +1,8 @@
+dist/
+coverage/
+node_modules/
+.angular/
+.git/
+**/node_modules/
+dist/
+build/

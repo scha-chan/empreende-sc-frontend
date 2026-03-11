@@ -7,6 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "prettier:check": "prettier --check .",
+    "prettier:fix": "prettier --write .",
     "serve:ssr:empreende-sc": "node dist/empreende-sc/server/server.mjs"
   },
   "private": true,
