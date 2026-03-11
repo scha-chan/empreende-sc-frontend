@@ -6,6 +6,10 @@ Plataforma de gestão de empreendimentos do estado de Santa Catarina. Este proje
 
 EmpreendeSC é uma aplicação web desenvolvida em Angular que permite o cadastro e gerenciamento de empreendimentos, empreendedores e informações relacionadas. A plataforma oferece uma interface intuitiva com validação de dados, notificações em tempo real e tratamento robusto de erros.
 
+### 🎨 Design e Interface
+
+A aplicação foi desenvolvida utilizando **Angular Material** como bibliotéca de componentes e template visual. O Material Design 3 fornece uma experiência de usuário moderna, responsiva e consonância com as melhores práticas de design de interface. Todos os componentes visuais (tabelas, formulários, botões, cards, ícones, etc.) seguem os princípios do Material Design.
+
 ### Funcionalidades Principais
 
 #### **Empreendimentos**
