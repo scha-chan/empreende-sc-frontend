@@ -80,3 +80,54 @@ mat-card {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.08);
 }
 
+/* ============================================
+   SNACKBAR - ESTILOS CUSTOMIZADOS
+   ============================================ */
+.mdc-snackbar.error-snackbar {
+  --mdc-snackbar-container-color: #f44336;
+}
+
+.mdc-snackbar.error-snackbar .mdc-snackbar__surface {
+  background-color: #f44336;
+}
+
+.mdc-snackbar.error-snackbar .mdc-snackbar__label {
+  color: #fff;
+}
+
+.mdc-snackbar.error-snackbar .mdc-button__label {
+  color: #fff;
+}
+
+.mdc-snackbar.warning-snackbar {
+  --mdc-snackbar-container-color: #ff9800;
+}
+
+.mdc-snackbar.warning-snackbar .mdc-snackbar__surface {
+  background-color: #ff9800;
+}
+
+.mdc-snackbar.warning-snackbar .mdc-snackbar__label {
+  color: #fff;
+}
+
+.mdc-snackbar.warning-snackbar .mdc-button__label {
+  color: #fff;
+}
+
+.mdc-snackbar.success-snackbar {
+  --mdc-snackbar-container-color: #4caf50;
+}
+
+.mdc-snackbar.success-snackbar .mdc-snackbar__surface {
+  background-color: #4caf50;
+}
+
+.mdc-snackbar.success-snackbar .mdc-snackbar__label {
+  color: #fff;
+}
+
+.mdc-snackbar.success-snackbar .mdc-button__label {
+  color: #fff;
+}
+

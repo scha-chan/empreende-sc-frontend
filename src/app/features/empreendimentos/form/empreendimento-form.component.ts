@@ -19,6 +19,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { Empreendedor, Municipio, EmpreendimentoCreate, EmpreendimentoUpdate } from '@app/core/models';
 import { SEGMENTO_ATUACAO_OPTIONS } from '@app/core/enums';
 import { HeaderComponent, LoadingComponent } from '@app/shared/components';
+import { PhoneMaskDirective } from '@app/shared/directives';
 import { EmpreendimentoService, EmpreendedorService, MunicipioService, NotificationService } from '@app/core/services';
 
 @Component({
@@ -36,6 +37,7 @@ import { EmpreendimentoService, EmpreendedorService, MunicipioService, Notificat
     MatCardModule,
     MatIconModule,
     MatGridListModule,
+    PhoneMaskDirective,
     LoadingComponent,
     HeaderComponent
   ],
@@ -99,10 +101,10 @@ export class EmpreendimentoFormComponent implements OnInit {
       nomeEmpreendedor: ['', [Validators.required]],
       municipio: ['', [Validators.required]],
       segmento: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      telefone: ['', [Validators.pattern(/^\(\d{2}\)\s?\d{4,5}-\d{4}$/)]],
+      email: ['', [Validators.email]],
+      telefone: ['', [Validators.pattern(/^$|^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
       status: [true],
-    });
+    }, { validators: this.atLeastOneContactValidator() });
 
     this.form.get('nomeEmpreendedor')?.valueChanges
       .pipe(
@@ -153,6 +155,7 @@ export class EmpreendimentoFormComponent implements OnInit {
           this.filteredMunicipios = [];
           this.isSearchingMunicipio = false;
           this.form.get('municipio')?.enable();
+          this.notificationService.tratarErroHttp(error, 'Erro ao buscar município');
           this.changeDetectorRef.markForCheck();
         },
       });
@@ -169,6 +172,7 @@ export class EmpreendimentoFormComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
+        this.notificationService.tratarErroHttp(error, 'Erro ao carregar empreendedores');
         this.changeDetectorRef.markForCheck();
       },
     });
@@ -211,11 +215,23 @@ export class EmpreendimentoFormComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          this.notificationService.exibirErro('Erro ao carregar empreendimento', error);
+          this.notificationService.tratarErroHttp(error, 'Erro ao carregar empreendimento');
           this.changeDetectorRef.markForCheck();
           this.voltarComReload();
         },
       });
+  }
+
+  private atLeastOneContactValidator() {
+    return (group: FormGroup) => {
+      const email = group.get('email')?.value;
+      const telefone = group.get('telefone')?.value;
+      
+      if (!email && !telefone) {
+        return { atLeastOneContact: true };
+      }
+      return null;
+    };
   }
 
   private filtrarEmpreendedores(termo: string): void {
@@ -273,22 +289,15 @@ export class EmpreendimentoFormComponent implements OnInit {
   }
 
   salvar(): void {
-    if (this.form.invalid || !this.selectedEmpreendedor || !this.selectedMunicipio) {
-      console.warn('Formulário inválido ou campos obrigatórios não preenchidos');
-      return;
-    }
-
-    if (!this.selectedEmpreendedor.id || !this.selectedMunicipio.id) {
-      console.warn('Empreendedor ou Município sem ID');
-      return;
-    }
+    const email = this.form.get('email')?.value;
+    const telefone = this.form.get('telefone')?.value;
 
     this.isSaving = true;
     
     const dados = {
       nomeEmpreendimento: this.form.get('nomeEmpreendimento')?.value,
-      empreendedorId: this.selectedEmpreendedor.id,
-      municipioId: this.selectedMunicipio.id,
+      empreendedorId: this.selectedEmpreendedor?.id,
+      municipioId: this.selectedMunicipio?.id,
       segmento: this.form.get('segmento')?.value,
       email: this.form.get('email')?.value,
       telefone: this.form.get('telefone')?.value,
@@ -302,12 +311,13 @@ export class EmpreendimentoFormComponent implements OnInit {
     operacao.subscribe({
       next: () => {
         this.isSaving = false;
+        this.notificationService.exibirSucesso('Empreendimento salvo com sucesso');
         this.voltarComReload();
       },
       error: (error) => {
         this.isSaving = false;
         this.changeDetectorRef.markForCheck();
-        this.notificationService.exibirErro('Erro ao salvar empreendimento', error);
+        this.notificationService.tratarErroHttp(error, 'Erro ao salvar empreendimento');
       },
     });
   }

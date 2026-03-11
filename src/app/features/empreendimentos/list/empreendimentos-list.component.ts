@@ -60,7 +60,7 @@ export class EmpreendimentosListComponent implements OnInit {
         error: (error) => {
           this.isLoading = false;
           this.changeDetectorRef.markForCheck();
-          this.notificationService.exibirErro('Erro ao carregar empreendimentos', error);
+          this.notificationService.tratarErroHttp(error, 'Erro ao carregar empreendimentos');
         },
       });
   }
@@ -85,7 +85,7 @@ export class EmpreendimentosListComponent implements OnInit {
           error: (error) => {
             this.isLoading = false;
             this.changeDetectorRef.markForCheck();
-            this.notificationService.exibirErro('Erro ao deletar empreendimento', error);
+            this.notificationService.tratarErroHttp(error, 'Erro ao deletar empreendimento');
           },
         });
     }

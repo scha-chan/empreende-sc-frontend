@@ -121,11 +121,6 @@
                 <mat-label>E-mail</mat-label>
                 <input matInput formControlName="email" placeholder="exemplo@email.com" />
                 <mat-icon matSuffix>email</mat-icon>
-                @if (form.get('email')?.hasError('required')) {
-                  <mat-error>
-                    E-mail é obrigatório
-                  </mat-error>
-                }
                 @if (form.get('email')?.hasError('email')) {
                   <mat-error>
                     E-mail inválido
@@ -137,7 +132,12 @@
             <mat-grid-tile [colspan]="2">
               <mat-form-field appearance="outline" class="full-width-field">
                 <mat-label>Telefone</mat-label>
-                <input matInput formControlName="telefone" placeholder="(11) 98765-4321" />
+                <input 
+                  matInput 
+                  appPhoneMask
+                  formControlName="telefone" 
+                  placeholder="(11) 98765-4321" 
+                />
                 <mat-icon matSuffix>phone</mat-icon>
                 @if (form.get('telefone')?.hasError('pattern')) {
                   <mat-error>
