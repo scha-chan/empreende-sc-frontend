@@ -20,7 +20,7 @@ Esta pipeline de CI/CD foi configurada para validar automaticamente todos os pul
 3. **Testes Unitários**
    - Executa testes com Vitest
    - Gera relatório de cobertura de código
-   - Comando: `npm test -- --run --coverage`
+   - Comando: `npm run test:coverage`
 
 4. **Build da Aplicação**
    - Compila o projeto Angular

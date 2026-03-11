@@ -24,7 +24,7 @@ Este guia ajuda desenvolvedores a entender e utilizar corretamente a pipeline de
 2. **Setup Node.js** - Configura Node 20.x com cache
 3. **Instalar dependências** - `npm ci`
 4. **Validar formatação** - `npm run prettier:check`
-5. **Rodar testes** - `npm test -- --run --coverage`
+5. **Rodar testes** - `npm run test:coverage`
 6. **Compilar aplicação** - `npm run build`
 7. **Verificar segurança** - `npm audit`
 8. **Armazenar artefatos** - Build + Coverage reports
@@ -136,7 +136,7 @@ npm test
 npm test -- --grep "nome do teste"
 
 # Rodar com coverage
-npm test -- --run --coverage
+npm run test:coverage
 ```
 
 ### "O build está falhando"
