@@ -1,0 +1,23 @@
+
+<mat-card class="header-card">
+  <div class="header-content">
+    <div class="header-text">
+      <h1>{{ title }}</h1>
+      @if (description) {
+        <p>{{ description }}</p>
+      }
+    </div>
+    <!-- Botão Adicionar -->
+    <div class="button-row">
+      @if (showAdd) {
+        <button mat-raised-button 
+        color="accent" 
+        (click)="novo()"
+        [disabled]="isLoading">
+        <mat-icon>add</mat-icon>
+        Novo Empreendimento
+        </button>
+      }
+    </div>
+  </div>
+</mat-card>

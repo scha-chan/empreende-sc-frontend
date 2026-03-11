@@ -7,11 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { Empreendimento } from '@app/core/models';
-import { LoadingComponent } from '@app/shared/components';
+import { LoadingComponent, HeaderComponent } from '@app/shared/components';
 import { StatusLabelPipe } from '@app/shared/pipes';
-import { EmpreendimentoService } from '@app/core/services';
+import { EmpreendimentoService, NotificationService } from '@app/core/services';
 
 @Component({
   selector: 'app-empreendimentos-list',
@@ -23,7 +24,9 @@ import { EmpreendimentoService } from '@app/core/services';
     MatIconModule,
     MatCardModule,
     MatTooltipModule,
+    MatChipsModule,
     LoadingComponent,
+    HeaderComponent,
     StatusLabelPipe,
   ],
   templateUrl: './empreendimentos-list.component.html',
@@ -38,6 +41,7 @@ export class EmpreendimentosListComponent implements OnInit {
   private empreendimentoService = inject(EmpreendimentoService);
   private router = inject(Router);
   private changeDetectorRef = inject(ChangeDetectorRef);
+  private notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.carregarEmpreendimentos(); 
@@ -58,6 +62,8 @@ export class EmpreendimentosListComponent implements OnInit {
         error: (error) => {
           console.error('Erro ao carregar empreendimentos:', error);
           this.isLoading = false;
+          this.changeDetectorRef.markForCheck();
+          this.notificationService.exibirErro('Erro ao carregar empreendimentos', error);
         },
       });
   }
@@ -82,6 +88,8 @@ export class EmpreendimentosListComponent implements OnInit {
           error: (error) => {
             console.error('Erro ao deletar:', error);
             this.isLoading = false;
+            this.changeDetectorRef.markForCheck();
+            this.notificationService.exibirErro('Erro ao deletar empreendimento', error);
           },
         });
     }

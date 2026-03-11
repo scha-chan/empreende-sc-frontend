@@ -5,6 +5,7 @@ export interface Empreendimento {
   municipio: Municipio;
   segmento: string;
   email: string;
+  telefone?: string;
   status: boolean;
   dataCriacao?: string;
   dataAtualizacao?: string;
@@ -16,6 +17,7 @@ export interface EmpreendimentoCreate {
   municipioId: number;
   segmento: string;
   email: string;
+  telefone?: string;
   status: boolean;
 }
 

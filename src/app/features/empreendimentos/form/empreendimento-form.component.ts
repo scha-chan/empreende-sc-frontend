@@ -1,9 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, ViewChild, DestroyRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, exhaustMap, filter } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,11 +15,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { Empreendimento, Empreendedor, Municipio, EmpreendimentoCreate, EmpreendimentoUpdate } from '@app/core/models';
 import { SEGMENTO_ATUACAO_OPTIONS } from '@app/core/enums';
-import { LoadingComponent } from '@app/shared/components';
-import { EmpreendimentoService, EmpreendedorService, MunicipioService } from '@app/core/services';
+import { HeaderComponent, LoadingComponent } from '@app/shared/components';
+import { EmpreendimentoService, EmpreendedorService, MunicipioService, NotificationService } from '@app/core/services';
 
 @Component({
   selector: 'app-empreendimento-form',
@@ -33,7 +36,9 @@ import { EmpreendimentoService, EmpreendedorService, MunicipioService } from '@a
     MatButtonModule,
     MatCardModule,
     MatIconModule,
+    MatGridListModule,
     LoadingComponent,
+    HeaderComponent
   ],
   templateUrl: './empreendimento-form.component.html',
   styleUrl: './empreendimento-form.component.scss',
@@ -45,6 +50,7 @@ export class EmpreendimentoFormComponent implements OnInit {
   isSaving = false;
   isEditMode = false;
   empreendimentoId: number | null = null;
+  gridCols = 4;
 
   empreendedores: Empreendedor[] = [];
   municipios: Municipio[] = [];
@@ -65,6 +71,9 @@ export class EmpreendimentoFormComponent implements OnInit {
   private empreendedorService = inject(EmpreendedorService);
   private changeDetectorRef = inject(ChangeDetectorRef);
   private municipioService = inject(MunicipioService);
+  private destroyRef = inject(DestroyRef);
+  private notificationService = inject(NotificationService);
+  private breakpointObserver = inject(BreakpointObserver);
 
   @ViewChild('municipioInput') municipioInput: any;
 
@@ -72,6 +81,17 @@ export class EmpreendimentoFormComponent implements OnInit {
     this.initForm();
     this.carregarDados();
     this.verificarEditMode();
+    this.observeBreakpoints();
+  }
+
+  private observeBreakpoints(): void {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        this.gridCols = result.matches ? 2 : 4;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   private initForm(): void {
@@ -81,13 +101,15 @@ export class EmpreendimentoFormComponent implements OnInit {
       municipio: ['', [Validators.required]],
       segmento: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
+      telefone: ['', [Validators.pattern(/^\(\d{2}\)\s?\d{4,5}-\d{4}$/)]],
       status: [true],
     });
 
     this.form.get('nomeEmpreendedor')?.valueChanges
       .pipe(
         debounceTime(300),
-        distinctUntilChanged()
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((value) => {
         this.filtrarEmpreendedores(value as string);
@@ -95,17 +117,49 @@ export class EmpreendimentoFormComponent implements OnInit {
 
     this.form.get('municipio')?.valueChanges
       .pipe(
-        tap((value) => console.log('Mudança no campo municipio:', value)),
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((termo) => {
-          console.log('Disparando filtro de municipi com termo:', termo);
-          return of(termo);
-        })
+        tap((value) => {
+          console.log('Mudança no campo municipio:', value);
+          // Resetar se estiver vazio ou menos de 3 caracteres
+          if (!value || value.length < 3) {
+            this.filteredMunicipios = [];
+            this.isSearchingMunicipio = false;
+            this.form.get('municipio')?.enable();
+            this.changeDetectorRef.markForCheck();
+          }
+        }),
+        filter((termo) => termo && termo.length >= 3),
+        tap(() => {
+          this.isSearchingMunicipio = true;
+          this.form.get('municipio')?.disable();
+          this.changeDetectorRef.markForCheck();
+        }),
+        exhaustMap((termo) => {
+          console.log('Buscando municipios com termo:', termo);
+          return this.municipioService.buscar(termo);
+        }),
+        takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((termo) => {
-        console.log('Processando termo no subscribe:', termo);
-        this.filtrarMunicipios(termo as string);
+      .subscribe({
+        next: (municipios) => {
+          console.log('Resultado da busca:', municipios);
+          this.filteredMunicipios = municipios as Municipio[];
+          this.isSearchingMunicipio = false;
+          this.form.get('municipio')?.enable();
+          this.changeDetectorRef.markForCheck();
+
+          setTimeout(() => {
+            this.municipioInput?.matAutocompletePanel?.open();
+          }, 100);
+        },
+        error: (error) => {
+          console.error('Erro ao buscar municipios:', error);
+          this.filteredMunicipios = [];
+          this.isSearchingMunicipio = false;
+          this.form.get('municipio')?.enable();
+          this.changeDetectorRef.markForCheck();
+        },
       });
   }
 
@@ -127,13 +181,17 @@ export class EmpreendimentoFormComponent implements OnInit {
   }
 
   private verificarEditMode(): void {
-    this.route.params.subscribe((params: any) => {
-      if (params.id) {
-        this.isEditMode = true;
-        this.empreendimentoId = parseInt(params.id, 10);
-        this.carregarEmpreendimento(this.empreendimentoId);
-      }
-    });
+    this.route.params
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((params: any) => {
+        if (params.id) {
+          this.isEditMode = true;
+          this.empreendimentoId = parseInt(params.id, 10);
+          this.carregarEmpreendimento(this.empreendimentoId);
+        }
+      });
   }
 
   private carregarEmpreendimento(id: number): void {
@@ -151,6 +209,7 @@ export class EmpreendimentoFormComponent implements OnInit {
             municipio: empreendimento.municipio.nome,
             segmento: empreendimento.segmento,
             email: empreendimento.email,
+            telefone: empreendimento.telefone,
             status: empreendimento.status,
           });
           this.isLoading = false;
@@ -159,6 +218,7 @@ export class EmpreendimentoFormComponent implements OnInit {
         error: (error) => {
           console.error('Erro ao carregar empreendimento:', error);
           this.isLoading = false;
+          this.notificationService.exibirErro('Erro ao carregar empreendimento', error);
           this.changeDetectorRef.markForCheck();
           this.voltarComReload();
         },
@@ -182,59 +242,6 @@ export class EmpreendimentoFormComponent implements OnInit {
     this.novoEmpreendedor = termo;
   }
 
-  private filtrarMunicipios(termo: string): void {
-    console.log('filtrarMunicipios chamado com termo:', termo, 'comprimento:', termo?.length);
-    
-    if (!termo || termo.length === 0) {
-      console.log('Termo vazio, resetando filtro');
-      this.filteredMunicipios = [];
-      this.isSearchingMunicipio = false;
-      this.form.get('municipio')?.enable();
-      this.changeDetectorRef.markForCheck();
-      return;
-    }
-
-    // Se tiver menos de 3 letras, não busca
-    if (termo.length < 3) {
-      console.log('Termo com menos de 3 letras, aguardando');
-      this.filteredMunicipios = [];
-      this.isSearchingMunicipio = false;
-      this.form.get('municipio')?.enable();
-      this.changeDetectorRef.markForCheck();
-      return;
-    }
-
-    // Buscar no backend
-    console.log('Buscando no backend com termo:', termo);
-    this.isSearchingMunicipio = true;
-    this.form.get('municipio')?.disable();
-    this.changeDetectorRef.markForCheck();
-    
-    this.municipioService
-      .buscar(termo)
-      .subscribe({
-        next: (municipios) => {
-          console.log('Resultado da busca:', municipios);
-          this.filteredMunicipios = municipios as Municipio[];
-          this.isSearchingMunicipio = false;
-          this.form.get('municipio')?.enable();
-          this.changeDetectorRef.markForCheck();
-          
-          // Abrir o painel do autocomplete com os resultados
-          setTimeout(() => {
-            this.municipioInput?.matAutocompletePanel?.open();
-          }, 100);
-        },
-        error: (error) => {
-          console.error('Erro ao buscar municipios:', error);
-          this.filteredMunicipios = [];
-          this.isSearchingMunicipio = false;
-          this.form.get('municipio')?.enable();
-          this.changeDetectorRef.markForCheck();
-        },
-      });
-  }
-
   public adicionarNovoEmpreendedor(): void {
     if (!this.novoEmpreendedor) return;
 
@@ -251,6 +258,7 @@ export class EmpreendimentoFormComponent implements OnInit {
           this.changeDetectorRef.markForCheck();
         },
         error: (error) => {
+          this.notificationService.exibirErro('Erro ao adicionar empreendedor', error);
           console.error('Erro ao adicionar empreendedor:', error);
           this.changeDetectorRef.markForCheck();
         },
@@ -293,6 +301,7 @@ export class EmpreendimentoFormComponent implements OnInit {
       municipioId: this.selectedMunicipio.id,
       segmento: this.form.get('segmento')?.value,
       email: this.form.get('email')?.value,
+      telefone: this.form.get('telefone')?.value,
       status: this.form.get('status')?.value,
     };
 
@@ -308,8 +317,10 @@ export class EmpreendimentoFormComponent implements OnInit {
         this.voltarComReload();
       },
       error: (error) => {
-        console.error('Erro ao salvar:', error);
         this.isSaving = false;
+        this.changeDetectorRef.markForCheck();
+        this.notificationService.exibirErro('Erro ao salvar empreendimento', error);
+        console.error('Erro ao salvar:', error);
       },
     });
   }
