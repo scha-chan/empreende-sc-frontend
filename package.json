@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
+    "test:coverage": "ng test --watch=false --coverage",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "serve:ssr:empreende-sc": "node dist/empreende-sc/server/server.mjs"
@@ -39,6 +40,7 @@
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "@vitest/coverage-v8": "^4.0.18"
   }
 }
