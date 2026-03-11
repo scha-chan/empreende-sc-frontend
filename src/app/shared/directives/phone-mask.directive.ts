@@ -20,7 +20,7 @@ export class PhoneMaskDirective {
     // Limita a 11 dígitos (DDD + 9 dígitos de celular)
     const limited = cleaned.slice(0, 11);
 
-    // Formata: (XX) 9XXXX-XXXX ou (XX) XXXX-XXXX
+    // Formata: (XX) 9XXXX-XXXX (11 dígitos, celular) ou (XX) XXXX-XXXX (10 dígitos, linha fixa)
     let formatted = '';
     if (limited.length === 0) {
       formatted = '';
@@ -28,7 +28,11 @@ export class PhoneMaskDirective {
       formatted = `(${limited}`;
     } else if (limited.length <= 7) {
       formatted = `(${limited.slice(0, 2)}) ${limited.slice(2)}`;
+    } else if (limited.length === 10) {
+      // Linha fixa: (XX) XXXX-XXXX
+      formatted = `(${limited.slice(0, 2)}) ${limited.slice(2, 6)}-${limited.slice(6)}`;
     } else {
+      // Celular: (XX) XXXXX-XXXX
       formatted = `(${limited.slice(0, 2)}) ${limited.slice(2, 7)}-${limited.slice(7)}`;
     }
 

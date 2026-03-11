@@ -102,7 +102,7 @@ export class EmpreendimentoFormComponent implements OnInit {
       municipio: ['', [Validators.required]],
       segmento: ['', [Validators.required]],
       email: ['', [Validators.email]],
-      telefone: ['', [Validators.pattern(/^$|^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
+      telefone: ['', [Validators.pattern(/^$|^\(\d{1,2}$|^\(\d{2}\)$|^\(\d{2}\)\s$|^\(\d{2}\)\s\d{0,5}$|^\(\d{2}\)\s\d{1,5}-$|^\(\d{2}\)\s\d{4,5}-\d{0,4}$/)]],
       status: [true],
     }, { validators: this.atLeastOneContactValidator() });
 
