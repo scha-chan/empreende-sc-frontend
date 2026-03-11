@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --watch=false",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "serve:ssr:empreende-sc": "node dist/empreende-sc/server/server.mjs"
