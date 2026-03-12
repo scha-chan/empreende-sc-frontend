@@ -15,9 +15,9 @@ A arquitetura é baseada em cliente-servidor com API REST:
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     FRONTEND (Angular 21)                       │
-│  - Componentes Standalone                                        │
-│  - Reactive Forms com Validators                                 │
-│  - Angular Material Components                                   │
+│  - Componentes Standalone                                       │
+│  - Reactive Forms com Validators                                │
+│  - Angular Material Components                                  │
 │  - RxJS para Programação Reativa                                │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
@@ -31,29 +31,11 @@ A arquitetura é baseada em cliente-servidor com API REST:
                        Database Access
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                  DATABASE (SQLite)                               │
+│                  DATABASE (SQLite)                              │
 │  - Tabelas: Empreendimentos, Empreendedores, Municípios         │
-│  - Armazenamento persistente de dados                            │
+│  - Armazenamento persistente de dados                           │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-## 🛠️ Tecnologias Utilizadas
-
-Este projeto foi gerado utilizando [Angular CLI](https://github.com/angular/angular-cli) versão 21.2.1.
-
-- **Angular 21+**: Framework de desenvolvimento
-- **Angular Material**: Componentes de interface
-- **TypeScript**: Linguagem de programação
-- **RxJS**: Programação reativa
-- **Material Design 3**: Sistema de design
-
-## 📦 Dependências Principais
-
-- `@angular/core`: Core do Angular
-- `@angular/material`: Componentes Material Design
-- `@angular/cdk`: Componentes e utilitários
-- `rxjs`: Biblioteca reativa
-- `sass`: Pré-processador CSS
 
 ### �🎨 Design e Interface
 
@@ -74,17 +56,15 @@ Cadastro completo de empreendimentos com informações detalhadas:
 - Email opcional mas deve ser válido (se preenchido)
 - Telefone opcional mas deve estar no formato (XX) 9XXXX-XXXX ou (XX) XXXX-XXXX (se preenchido)
 - Pelo menos um contato (email ou telefone) deve estar preenchido ao salvar
-- Validação em tempo real com mensagens de erro claras
 
 #### **Empreendedores**
 
 - **Nome**: Identificação do empreendedor
 - Possibilidade de criar novo empreendedor durante o cadastro de empreendimento
-- Autocomplete com busca instant para seleção rápida
-- Validação de campos obrigatórios
+- Autocomplete com busca para uma seleção rápida
 
 #### **Municípios**
-Base de dados de municípios de Santa Catarina:
+Base de dados de municípios do IBGE de Santa Catarina:
 - **Busca dinâmica**: Digite 3 ou mais letras para buscar
 - **Autocomplete**: Resultados aparecem conforme você digita
 - **Informações**: Nome e estado do município
@@ -186,6 +166,25 @@ ng e2e
 ```
 
 O Angular CLI não vem com um framework de teste end-to-end por padrão. Você pode escolher um que se adeque às suas necessidades.
+
+
+## 🛠️ Tecnologias Utilizadas
+
+Este projeto foi gerado utilizando [Angular CLI](https://github.com/angular/angular-cli) versão 21.2.1.
+
+- **Angular 21+**: Framework de desenvolvimento
+- **Angular Material**: Componentes de interface
+- **TypeScript**: Linguagem de programação
+- **RxJS**: Programação reativa
+- **Material Design 3**: Sistema de design
+
+## 📦 Dependências Principais
+
+- `@angular/core`: Core do Angular
+- `@angular/material`: Componentes Material Design
+- `@angular/cdk`: Componentes e utilitários
+- `rxjs`: Biblioteca reativa
+- `sass`: Pré-processador CSS
 
 ## 📚 Recursos Adicionais
 
