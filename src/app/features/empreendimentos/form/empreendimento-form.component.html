@@ -41,14 +41,13 @@
                   matInput
                   [matAutocomplete]="autoEmpreendedor"
                   formControlName="nomeEmpreendedor"
-                  placeholder="Procure ou adicione um novo"
+                  placeholder="Procure ou adicione um novo (necessário um click extra para atualizar a lista)"
                 />
-                <mat-autocomplete #autoEmpreendedor="matAutocomplete">
+                <mat-autocomplete #autoEmpreendedor="matAutocomplete" (optionSelected)="selecionarEmpreendedorPorNome($event.option.value)">
                   <mat-optgroup label="Empreendedores">
                     <mat-option
                       *ngFor="let emp of filteredEmpreendedores"
                       [value]="emp.nome"
-                      (click)="selecionarEmpreendedor(emp)"
                     >
                       {{ emp.nome }}
                     </mat-option>

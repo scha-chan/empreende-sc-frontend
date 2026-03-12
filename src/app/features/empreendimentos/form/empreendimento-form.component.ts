@@ -273,12 +273,26 @@ export class EmpreendimentoFormComponent implements OnInit {
       });
   }
 
+  public selecionarEmpreendedorPorNome(nome: string): void {
+    // Procura o empreendedor na lista de filtrados
+    const empreendedor = this.filteredEmpreendedores.find(e => e.nome === nome) || 
+                        this.empreendedores.find(e => e.nome === nome);
+    
+    if (empreendedor) {
+      this.selecionarEmpreendedor(empreendedor);
+    }
+  }
+
   public selecionarEmpreendedor(empreendedor: Empreendedor): void {
     this.selectedEmpreendedor = empreendedor;
     this.form.get('nomeEmpreendedor')?.setValue(empreendedor.nome, { emitEvent: false });
-    this.filteredEmpreendedores = [];
-    this.showAddEmpreendedor = false;
-    this.changeDetectorRef.markForCheck();
+    
+    // Usa setTimeout para permitir que o autocomplete feche naturalmente
+    setTimeout(() => {
+      this.filteredEmpreendedores = [];
+      this.showAddEmpreendedor = false;
+      this.changeDetectorRef.markForCheck();
+    }, 0);
   }
 
   public selecionarMunicipio(municipio: Municipio): void {
