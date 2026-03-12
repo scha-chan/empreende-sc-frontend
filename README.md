@@ -35,6 +35,31 @@ A arquitetura é baseada em cliente-servidor com API REST:
 │  - Tabelas: Empreendimentos, Empreendedores, Municípios         │
 │  - Armazenamento persistente de dados                           │
 └─────────────────────────────────────────────────────────────────┘
+
+```
+### 📁 Estrutura de Pastas
+
+```
+empreende-sc-frontend/
+├── src/
+│   └── app/
+│       ├── core/
+│       │   ├── enums/
+│       │   ├── models/
+│       │   └── services/
+│       ├── features/
+│       │   └── empreendimentos/
+│       │       ├── list/
+│       │       └── form/
+│       └── shared/
+│           ├── components/
+│           │   ├── header/
+│           │   └── loading/
+│           ├── directives/
+│           └── pipes/
+├── public/
+├── coverage/
+└── .github/
 ```
 
 ### �🎨 Design e Interface
