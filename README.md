@@ -1,6 +1,6 @@
 # EmpreendeSC
 
-Plataforma de gestão de empreendimentos do estado de Santa Catarina. Este projeto foi gerado utilizando [Angular CLI](https://github.com/angular/angular-cli) versão 21.2.1.
+Plataforma de gestão de empreendimentos do estado de Santa Catarina. 
 
 ## 📋 Sobre o Projeto
 
@@ -38,6 +38,8 @@ A arquitetura é baseada em cliente-servidor com API REST:
 ```
 
 ## 🛠️ Tecnologias Utilizadas
+
+Este projeto foi gerado utilizando [Angular CLI](https://github.com/angular/angular-cli) versão 21.2.1.
 
 - **Angular 21+**: Framework de desenvolvimento
 - **Angular Material**: Componentes de interface
