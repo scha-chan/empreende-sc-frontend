@@ -2,6 +2,9 @@
 
 Plataforma de gestão de empreendimentos do estado de Santa Catarina. 
 
+A apresentação (PIT) se encontra no youtube:
+https://youtu.be/rNhbed324uk
+
 ## 📋 Sobre o Projeto
 
 Esse projeto propõe a criação de um sistema web simples para cadastro e gerenciamento de empreendimentos do estado de Santa Catarina.
