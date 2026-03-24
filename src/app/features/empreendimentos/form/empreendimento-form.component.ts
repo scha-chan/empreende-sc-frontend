@@ -102,7 +102,7 @@ export class EmpreendimentoFormComponent implements OnInit {
       municipio: ['', [Validators.required]],
       segmento: ['', [Validators.required]],
       email: ['', [Validators.email]],
-      telefone: ['', [Validators.pattern(/^$|^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
+      telefone: ['', [Validators.pattern(/^$|^\(\d{1,2}$|^\(\d{2}\)$|^\(\d{2}\)\s$|^\(\d{2}\)\s\d{0,5}$|^\(\d{2}\)\s\d{1,5}-$|^\(\d{2}\)\s\d{4,5}-\d{0,4}$/)]],
       status: [true],
     }, { validators: this.atLeastOneContactValidator() });
 
@@ -273,12 +273,26 @@ export class EmpreendimentoFormComponent implements OnInit {
       });
   }
 
+  public selecionarEmpreendedorPorNome(nome: string): void {
+    // Procura o empreendedor na lista de filtrados
+    const empreendedor = this.filteredEmpreendedores.find(e => e.nome === nome) || 
+                        this.empreendedores.find(e => e.nome === nome);
+    
+    if (empreendedor) {
+      this.selecionarEmpreendedor(empreendedor);
+    }
+  }
+
   public selecionarEmpreendedor(empreendedor: Empreendedor): void {
     this.selectedEmpreendedor = empreendedor;
     this.form.get('nomeEmpreendedor')?.setValue(empreendedor.nome, { emitEvent: false });
-    this.filteredEmpreendedores = [];
-    this.showAddEmpreendedor = false;
-    this.changeDetectorRef.markForCheck();
+    
+    // Usa setTimeout para permitir que o autocomplete feche naturalmente
+    setTimeout(() => {
+      this.filteredEmpreendedores = [];
+      this.showAddEmpreendedor = false;
+      this.changeDetectorRef.markForCheck();
+    }, 0);
   }
 
   public selecionarMunicipio(municipio: Municipio): void {
